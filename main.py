@@ -1,0 +1,90 @@
+import csv
+from dataclasses import dataclass
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+
+@dataclass
+class Expense:
+    start_date: datetime
+    end_date: datetime | None
+    category: str
+    merchant: str
+    description: str | None
+    amount: str
+
+    @classmethod
+    def from_dict(cls, row: dict):
+        return cls(
+            start_date=parse_date(row["start_date"]),
+            end_date=parse_date(row["end_date"]),
+            category=row["category"],
+            merchant=row["merchant"],
+            description=row["description"],
+            amount=float(row["amount"])
+        )
+
+
+def parse_date(value):
+    if not value:
+        return None
+    return datetime.strptime(value, "%Y-%m-%d")
+
+
+def load_expenses(file_path):
+    with open(file_path, mode='r', encoding='utf-8', newline='') as file:
+        reader = csv.DictReader(file)
+        expenses = []
+
+        for row in reader:
+            expense = Expense.from_dict(row)
+            expenses.append(expense)
+
+        return expenses
+
+
+def payment_schedule(
+    bill: Expense,
+    schedule_start_date: datetime,
+    schedule_end_date: datetime
+):
+    """
+    start and end date are inclusive
+    """
+
+    if schedule_end_date < bill.start_date:
+        return None
+
+    if bill.end_date and schedule_start_date > bill.end_date:
+        return None
+
+    scheduled_dates = []
+    current_bill_date = bill.start_date
+    months_elapsed = 0
+
+    while current_bill_date <= schedule_end_date:
+        if bill.end_date and current_bill_date > bill.end_date:
+            break
+
+        if current_bill_date < schedule_start_date:
+            continue
+
+        scheduled_dates.append(current_bill_date)
+        months_elapsed += 1
+        current_bill_date = (
+            bill.start_date + relativedelta(months=months_elapsed)
+        )
+
+    return scheduled_dates
+
+
+expenses = load_expenses('expenses.csv')
+
+
+for expense in expenses:
+    print('------')
+    start_date = datetime.strptime('2026-10-01', "%Y-%m-%d")
+    end_date = datetime.strptime('2027-10-01', "%Y-%m-%d")
+    print(payment_schedule(expense, start_date, end_date))
+    print('------')
+    break
