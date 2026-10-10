@@ -1,28 +1,7 @@
 import csv
-from dataclasses import dataclass
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
-
-@dataclass
-class Expense:
-    start_date: datetime
-    end_date: datetime | None
-    category: str
-    merchant: str
-    description: str | None
-    amount: str
-
-    @classmethod
-    def from_dict(cls, row: dict):
-        return cls(
-            start_date=parse_date(row["start_date"]),
-            end_date=parse_date(row["end_date"]),
-            category=row["category"],
-            merchant=row["merchant"],
-            description=row["description"],
-            amount=float(row["amount"])
-        )
+from expense import Expense
 
 
 def parse_date(value):
@@ -37,6 +16,8 @@ def load_expenses(file_path):
         expenses = []
 
         for row in reader:
+            row["start_date"] = parse_date(row["start_date"])
+            row["end_date"] = parse_date(row["end_date"])
             expense = Expense.from_dict(row)
             expenses.append(expense)
 
@@ -66,10 +47,8 @@ def payment_schedule(
         if bill.end_date and current_bill_date > bill.end_date:
             break
 
-        if current_bill_date < schedule_start_date:
-            continue
-
-        scheduled_dates.append(current_bill_date)
+        if current_bill_date >= schedule_start_date:
+            scheduled_dates.append(current_bill_date)
         months_elapsed += 1
         current_bill_date = (
             bill.start_date + relativedelta(months=months_elapsed)
@@ -80,11 +59,17 @@ def payment_schedule(
 
 expenses = load_expenses('expenses.csv')
 
+start_date = datetime.now()
+end_date = datetime.strptime('2027-10-01', "%Y-%m-%d")
+
+bills = []
 
 for expense in expenses:
-    print('------')
-    start_date = datetime.strptime('2026-10-01', "%Y-%m-%d")
-    end_date = datetime.strptime('2027-10-01', "%Y-%m-%d")
-    print(payment_schedule(expense, start_date, end_date))
-    print('------')
-    break
+    expense_payment_schedule = payment_schedule(expense, start_date, end_date)
+    bills.extend(
+        [(payment_date, expense) for payment_date in expense_payment_schedule]
+    )
+
+
+for bill in sorted(bills, key=lambda x: x[0]):
+    print(bill[0].strftime("%m/%d/%Y"), bill[1].merchant)
