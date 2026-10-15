@@ -57,19 +57,9 @@ def payment_schedule(
     return scheduled_dates
 
 
-expenses = load_expenses('expenses.csv')
-
-start_date = datetime.now()
-end_date = datetime.strptime('2027-10-01', "%Y-%m-%d")
-
-bills = []
-
-for expense in expenses:
-    expense_payment_schedule = payment_schedule(expense, start_date, end_date)
-    bills.extend(
-        [(payment_date, expense) for payment_date in expense_payment_schedule]
-    )
+def start_up_app():
+    expenses = load_expenses('expenses.csv')
+    print(expenses)
 
 
-for bill in sorted(bills, key=lambda x: x[0]):
-    print(bill[0].strftime("%m/%d/%Y"), bill[1].merchant)
+start_up_app()

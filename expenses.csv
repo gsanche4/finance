@@ -1,5 +1,5 @@
 start_date,end_date,category,merchant,description,amount
-2026-10-06,2027-12-01,subscription,Apple,Gmail,2.12
+2026-10-06,,subscription,Apple,Gmail,2.12
 2026-10-10,,subscription,ChatGPT,AI,8.00
 2026-10-20,,subscription,Apple,Apple Music,5.99
 2026-10-21,,subscription,Apple,Monarch Bookeeping,15.98
