@@ -1,13 +1,13 @@
-start_date,end_date,category,merchant,description,amount
-2026-10-06,,subscription,Apple,Gmail,2.12
-2026-10-10,,subscription,ChatGPT,AI,8.00
-2026-10-20,,subscription,Apple,Apple Music,5.99
-2026-10-21,,subscription,Apple,Monarch Bookeeping,15.98
-2026-10-24,,subscription,Microsoft,Office 365,5.32
-2026-10-26,,subscription,Apple,ICloud Storage,2.99
-2026-10-07,,utilities,Visible,Phone,35.00
-2026-10-01,,health,Solstice,Dental Insurance,9.38
-2026-10-01,,health,Horizon,Health Insurance,113.43
-2026-10-01,,obligation,College Ave,Student Loans,105.00
-2026-10-01,,obligation,College Ave,Student Loans,55.00
-2026-10-07,,obligation,NJCLASS,Student Loans,66.99
+start_date,end_date,frequency,category,merchant,description,amount
+2026-10-06,,monthly,subscription,Apple,Gmail,2.12
+2026-10-10,,monthly,subscription,ChatGPT,AI,8.00
+2026-10-20,,monthly,subscription,Apple,Apple Music,5.99
+2026-10-21,,monthly,subscription,Apple,Monarch Bookeeping,15.98
+2026-10-24,,monthly,subscription,Microsoft,Office 365,5.32
+2026-10-26,,monthly,subscription,Apple,ICloud Storage,2.99
+2026-10-07,,monthly,utilities,Visible,Phone,35.00
+2026-10-01,,monthly,health,Solstice,Dental Insurance,9.38
+2026-10-01,,monthly,health,Horizon,Health Insurance,113.43
+2026-10-01,,monthly,obligation,College Ave,Student Loans,105.00
+2026-10-01,,monthly,obligation,College Ave,Student Loans,55.00
+2026-10-07,,monthly,obligation,NJCLASS,Student Loans,66.99
