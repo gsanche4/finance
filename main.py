@@ -1,7 +1,8 @@
 import csv
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from expense import Expense
+from models.expense import Expense
+from models.payment_scheduler import PaymentScheduler
 
 
 def parse_date(value):
@@ -59,7 +60,14 @@ def payment_schedule(
 
 def start_up_app():
     expenses = load_expenses('expenses.csv')
-    print(expenses)
+    payment_schedule = PaymentScheduler().payment_schedule_by_expense(
+        expense=expenses[0],
+        schedule_start_date=datetime(2026, 10, 1),
+        schedule_end_date=datetime(2027, 1, 15)
+    )
+
+    print(expenses[0].merchant)
+    print(payment_schedule)
 
 
 start_up_app()
