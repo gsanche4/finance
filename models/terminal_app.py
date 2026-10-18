@@ -1,5 +1,5 @@
 from InquirerPy import inquirer
-from runner import print_payment_schedule
+from runner import print_payment_schedule, view_expenses
 
 
 class TerminalApp:
@@ -15,12 +15,14 @@ class TerminalApp:
             message="What action would you like to perform?",
             choices=[
                 "View Payment Schedule by Expense",
+                "View Expenses",
                 "Exit"
             ],
         ).execute()
 
         menu_actions = {
             "View Payment Schedule by Expense": print_payment_schedule,
+            "View Expenses": view_expenses,
             "Exit": self.exit_app
         }
 
