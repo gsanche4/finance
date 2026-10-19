@@ -1,15 +1,12 @@
-from models.expense import Expense
-from models.payment_frequency import PaymentFrequency
+
+
+from budget_planner.domain.expense import Expense
+from budget_planner.domain.payment_frequency import PaymentFrequency
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 
 class PaymentScheduler:
-    def __init__(self):
-        self.expenses = []
-
-    def add_expense(self, expense: Expense):
-        self.expenses.append(expense)
 
     def next_due_date(self, expense: Expense, evaluation_date=None):
         if not evaluation_date:
@@ -52,8 +49,6 @@ class PaymentScheduler:
             expense=expense,
             evaluation_date=search_start
         )
-
-        print("Search Start:", search_start)
 
         while current_payment and current_payment <= schedule_end_date:
             if expense.end_date and current_payment > expense.end_date:

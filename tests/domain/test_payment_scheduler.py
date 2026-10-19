@@ -1,7 +1,7 @@
 import unittest
-from models.payment_scheduler import PaymentScheduler
-from models.payment_frequency import PaymentFrequency
-from models.expense import Expense
+from budget_planner.domain.payment_scheduler import PaymentScheduler
+from budget_planner.domain.payment_frequency import PaymentFrequency
+from budget_planner.domain.expense import Expense
 from datetime import datetime
 
 
@@ -19,13 +19,9 @@ class TestPaymentScheduler(unittest.TestCase):
             amount="5.99"
         )
 
-    def test_add_expense(self):
-        self.payment_scheduler.add_expense(expense=self.expense)
-        self.assertEqual(len(self.payment_scheduler.expenses), 1)
-
     def test_next_due_date_adds_one_month(self):
         self.assertEqual(
-            self.payment_scheduler._next_due_date(
+            self.payment_scheduler.next_due_date(
                 expense=self.expense,
                 evaluation_date=datetime(2026, 10, 7)
             ),
@@ -37,7 +33,7 @@ class TestPaymentScheduler(unittest.TestCase):
 
         # Short month last day
         self.assertEqual(
-            self.payment_scheduler._next_due_date(
+            self.payment_scheduler.next_due_date(
                 expense=self.expense,
                 evaluation_date=datetime(2026, 2, 1)
             ),
@@ -46,7 +42,7 @@ class TestPaymentScheduler(unittest.TestCase):
 
         # After a short month, its still the last day
         self.assertEqual(
-            self.payment_scheduler._next_due_date(
+            self.payment_scheduler.next_due_date(
                 expense=self.expense,
                 evaluation_date=datetime(2026, 3, 1)
             ),
@@ -55,7 +51,7 @@ class TestPaymentScheduler(unittest.TestCase):
 
     def test_next_due_date_returns_none_if_end_date_reached(self):
         self.assertEqual(
-            self.payment_scheduler._next_due_date(
+            self.payment_scheduler.next_due_date(
                 expense=self.expense,
                 evaluation_date=datetime(2027, 10, 9)
             ),
@@ -65,7 +61,7 @@ class TestPaymentScheduler(unittest.TestCase):
     def test_next_due_date_returns_none_if_start_date_beyond_end_date(self):
         self.expense.start_date = datetime(2027, 10, 16)
         self.assertEqual(
-            self.payment_scheduler._next_due_date(
+            self.payment_scheduler.next_due_date(
                 expense=self.expense
             ),
             None
