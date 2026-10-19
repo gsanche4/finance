@@ -1,6 +1,8 @@
+
+
 from dataclasses import dataclass
 from datetime import datetime
-from models.payment_frequency import PaymentFrequency
+from budget_planner.domain.payment_frequency import PaymentFrequency
 
 
 @dataclass
