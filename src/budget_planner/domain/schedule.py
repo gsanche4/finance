@@ -2,7 +2,7 @@
 
 from budget_planner.domain.expense import Expense
 from budget_planner.domain.payment_frequency import PaymentFrequency
-from budget_planner.domain.expense_occurence import ExpenseOccurence
+from budget_planner.domain.expense_occurrence import ExpenseOccurrence
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 def first_occurrence_on_or_after(
         expense: Expense,
         day: date
-) -> ExpenseOccurence | None:
+) -> ExpenseOccurrence:
     if not day:
         day = expense.start_date
 
@@ -30,62 +30,36 @@ def first_occurrence_on_or_after(
     if expense.end_date and current_due_date > expense.end_date:
         return None
 
-    return ExpenseOccurence(expense=expense, due_date=current_due_date)
+    return ExpenseOccurrence(expense=expense, due_date=current_due_date)
 
 
-class PaymentScheduler:
+def occurrences_between(
+    expense: Expense,
+    start: date,
+    end: date
+) -> list[ExpenseOccurrence]:
+    if end < expense.start_date:
+        return []
+    if expense.end_date and start > expense.end_date:
+        return []
 
-    def next_due_date(self, expense: Expense, on_or_after=None):
-        if not on_or_after:
-            on_or_after = expense.start_date
+    payments = []
 
-        if expense.end_date and expense.start_date > expense.end_date:
-            return None
+    search_start = max(expense.start_date, start)
+    current_payment = first_occurrence_on_or_after(
+        expense=expense,
+        day=search_start
+    )
 
-        current_due_date = expense.start_date
+    while current_payment and current_payment.due_date <= end:
+        if expense.end_date and current_payment.due_date > expense.end_date:
+            break
 
-        if expense.frequency == PaymentFrequency.MONTHLY:
+        payments.append(current_payment)
 
-            months_elapsed = 1
-            while current_due_date < on_or_after:
-                current_due_date = (
-                    expense.start_date + relativedelta(months=months_elapsed)
-                )
-                months_elapsed += 1
-
-        if expense.end_date and current_due_date > expense.end_date:
-            return None
-
-        return current_due_date
-
-    def payment_schedule_by_expense(
-        self,
-        expense: Expense,
-        range_start: date,
-        range_end: date
-    ):
-        if range_end < expense.start_date:
-            return []
-        if expense.end_date and range_start > expense.end_date:
-            return []
-
-        payments = []
-
-        search_start = max(expense.start_date, range_start)
-        current_payment = self.next_due_date(
+        current_payment = first_occurrence_on_or_after(
             expense=expense,
-            on_or_after=search_start
+            day=(current_payment.due_date + relativedelta(days=1))
         )
 
-        while current_payment and current_payment <= range_end:
-            if expense.end_date and current_payment > expense.end_date:
-                break
-
-            payments.append(current_payment)
-
-            current_payment = self.next_due_date(
-                expense=expense,
-                on_or_after=(current_payment + relativedelta(days=1))
-            )
-
-        return payments
+    return payments

@@ -7,6 +7,6 @@ from datetime import date
 
 
 @dataclass(frozen=True)
-class ExpenseOccurence:
+class ExpenseOccurrence:
     expense: Expense
     due_date: date

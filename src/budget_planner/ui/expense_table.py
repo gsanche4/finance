@@ -1,11 +1,12 @@
 
 
 from budget_planner.domain.expense import Expense
-from budget_planner.domain.schedule import PaymentScheduler
+from budget_planner.domain.schedule import first_occurrence_on_or_after
+
 from datetime import date
 
 
-def print_expenses(expenses: list[Expense]) -> None:
+def expense_table(expenses: list[Expense]) -> None:
     if not expenses:
         print("No expenses found.")
         return
@@ -15,8 +16,8 @@ def print_expenses(expenses: list[Expense]) -> None:
 
     for expense in expenses:
         expense_date = (
-            PaymentScheduler()
-            .next_due_date(expense, date.today())
+            first_occurrence_on_or_after(expense, date.today())
+            .due_date
             .strftime("%m/%d/%y")
         )
 

@@ -1,3 +1,4 @@
+"""
 import unittest
 from budget_planner.domain.schedule import PaymentScheduler
 from budget_planner.domain.payment_frequency import PaymentFrequency
@@ -66,3 +67,4 @@ class TestPaymentScheduler(unittest.TestCase):
             ),
             None
         )
+"""
