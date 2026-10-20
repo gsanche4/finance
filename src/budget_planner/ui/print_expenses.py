@@ -1,7 +1,7 @@
 
 
 from budget_planner.domain.expense import Expense
-from budget_planner.domain.payment_scheduler import PaymentScheduler
+from budget_planner.domain.schedule import PaymentScheduler
 from datetime import date
 
 

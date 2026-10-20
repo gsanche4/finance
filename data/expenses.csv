@@ -1,13 +1,13 @@
-start_date,end_date,frequency,category,merchant,description,amount
-2026-10-06,,monthly,subscription,Apple,Gmail,2.12
-2026-10-10,,monthly,subscription,ChatGPT,AI,8.00
-2026-10-20,,monthly,subscription,Apple,Apple Music,5.99
-2026-10-21,,monthly,subscription,Apple,Monarch Bookeeping,15.98
-2026-10-24,,monthly,subscription,Microsoft,Office 365,5.32
-2026-10-26,,monthly,subscription,Apple,ICloud Storage,2.99
-2026-10-07,,monthly,utilities,Visible,Phone,35.00
-2026-10-01,,monthly,health,Solstice,Dental Insurance,9.38
-2026-10-01,,monthly,health,Horizon,Health Insurance,113.43
-2026-10-01,,monthly,obligation,College Ave,Student Loans,105.00
-2026-10-01,,monthly,obligation,College Ave,Student Loans,55.00
-2026-10-07,,monthly,obligation,NJCLASS,Student Loans,66.99
+id,start_date,end_date,frequency,category,merchant,description,amount
+965e4151-e606-4ca7-8254-2457c2782d04,2026-10-06,,monthly,subscription,Apple,Gmail,2.12
+220e1c7c-053b-4fbb-b70a-8f2f19e6bf81,2026-10-10,,monthly,subscription,ChatGPT,AI,8.00
+75e808a4-b392-4453-98b9-7771a9ebb770,2026-10-20,,monthly,subscription,Apple,Apple Music,5.99
+1b98bf5e-5d04-4654-9c88-06ae2d78d7c7,2026-10-21,,monthly,subscription,Apple,Monarch Bookeeping,15.98
+916ace14-cbaa-40b7-a7ef-346978cb435f,2026-10-24,,monthly,subscription,Microsoft,Office 365,5.32
+dfa92c26-9acc-43f0-bd66-15702dc53f13,2026-10-26,,monthly,subscription,Apple,ICloud Storage,2.99
+2757dc11-07db-4a80-b1f2-a5754dd54d1e,2026-10-07,,monthly,utilities,Visible,Phone,35.00
+2bfd3b94-c412-44f8-9afa-a064aba84e1d,2026-10-01,,monthly,health,Solstice,Dental Insurance,9.38
+26389b84-618e-4a04-b738-66f15fede8e2,2026-10-01,,monthly,health,Horizon,Health Insurance,113.43
+208d2232-7132-4103-8388-e91b9194080d,2026-10-01,,monthly,obligation,College Ave,Student Loans,105.00
+fdadd3b3-b974-49ed-aa48-21b2d7baaba2,2026-10-01,,monthly,obligation,College Ave,Student Loans,55.00
+28d76019-b59b-4435-9ab8-3f47196cae38,2026-10-07,,monthly,obligation,NJCLASS,Student Loans,66.99

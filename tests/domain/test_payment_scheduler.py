@@ -1,5 +1,5 @@
 import unittest
-from budget_planner.domain.payment_scheduler import PaymentScheduler
+from budget_planner.domain.schedule import PaymentScheduler
 from budget_planner.domain.payment_frequency import PaymentFrequency
 from budget_planner.domain.expense import Expense
 from datetime import date
@@ -23,7 +23,7 @@ class TestPaymentScheduler(unittest.TestCase):
         self.assertEqual(
             self.payment_scheduler.next_due_date(
                 expense=self.expense,
-                evaluation_date=date(2026, 10, 7)
+                on_or_after=date(2026, 10, 7)
             ),
             date(2026, 11, 6)
         )
@@ -35,7 +35,7 @@ class TestPaymentScheduler(unittest.TestCase):
         self.assertEqual(
             self.payment_scheduler.next_due_date(
                 expense=self.expense,
-                evaluation_date=date(2026, 2, 1)
+                on_or_after=date(2026, 2, 1)
             ),
             date(2026, 2, 28)
         )
@@ -44,7 +44,7 @@ class TestPaymentScheduler(unittest.TestCase):
         self.assertEqual(
             self.payment_scheduler.next_due_date(
                 expense=self.expense,
-                evaluation_date=date(2026, 3, 1)
+                on_or_after=date(2026, 3, 1)
             ),
             date(2026, 3, 31)
         )
@@ -53,7 +53,7 @@ class TestPaymentScheduler(unittest.TestCase):
         self.assertEqual(
             self.payment_scheduler.next_due_date(
                 expense=self.expense,
-                evaluation_date=date(2027, 10, 9)
+                on_or_after=date(2027, 10, 9)
             ),
             None
         )
