@@ -2,7 +2,7 @@
 
 from budget_planner.domain.expense import Expense
 from budget_planner.domain.payment_frequency import PaymentFrequency
-from datetime import datetime
+from datetime import date
 from dateutil.relativedelta import relativedelta
 
 
@@ -34,8 +34,8 @@ class PaymentScheduler:
     def payment_schedule_by_expense(
         self,
         expense: Expense,
-        schedule_start_date: datetime,
-        schedule_end_date: datetime
+        schedule_start_date: date,
+        schedule_end_date: date
     ):
         if schedule_end_date < expense.start_date:
             return []

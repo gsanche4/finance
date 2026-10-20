@@ -1,14 +1,14 @@
 
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date
 from budget_planner.domain.payment_frequency import PaymentFrequency
 
 
 @dataclass
 class Expense:
-    start_date: datetime
-    end_date: datetime | None
+    start_date: date
+    end_date: date | None
     frequency: PaymentFrequency
     category: str
     merchant: str
