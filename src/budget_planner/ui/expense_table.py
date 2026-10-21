@@ -1,34 +1,26 @@
 
 
-from budget_planner.domain.expense import Expense
-from budget_planner.domain.schedule import first_occurrence_on_or_after
-
-from datetime import date
+from budget_planner.domain.expense_occurrence import ExpenseOccurrence
 
 
-def expense_table(expenses: list[Expense]) -> None:
-    if not expenses:
+def expense_table(expense_occurrences: list[ExpenseOccurrence]) -> None:
+    if not expense_occurrences:
         print("No expenses found.")
         return
 
     print(f"{'Merchant':<20} {'Category':<15} {'Amount':>12} {'Due Date':>12}")
     print("-" * 62)
 
-    for expense in expenses:
-        expense_date = (
-            first_occurrence_on_or_after(expense, date.today())
-            .due_date
-            .strftime("%m/%d/%y")
-        )
-
+    total_expense_amount = 0
+    for occurrence in expense_occurrences:
+        expense = occurrence.expense
+        total_expense_amount += expense.amount
         print(
             f"{expense.merchant:<20} "
             f"{expense.category:<15} "
             f"${expense.amount:>9,.2f} "
-            f"{expense_date:>12}"
+            f"{occurrence.due_date.strftime('%m/%d/%y'):>12}"
         )
 
     print("-" * 62)
-
-    total = sum(expense.amount for expense in expenses)
-    print(f"{'Total':<35} ${total:>11,.2f}")
+    print(f"{'Total':<35} ${total_expense_amount:>11,.2f}")

@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 def first_occurrence_on_or_after(
         expense: Expense,
         day: date
-) -> ExpenseOccurrence:
+) -> ExpenseOccurrence | None:
     if not day:
         day = expense.start_date
 
