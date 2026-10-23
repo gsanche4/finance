@@ -1,13 +1,18 @@
 
 
 import csv
-
+from datetime import date
 from budget_planner.domain.expense import Expense
-from budget_planner.storage.parse_date import parse_date
 
 
-def load_expenses(file_path):
-    with open(file_path, mode='r', encoding='utf-8', newline='') as file:
+def parse_date(value):
+    if not value:
+        return None
+    return date.fromisoformat(value)
+
+
+def load_expenses(csv_path):
+    with open(csv_path, mode='r', encoding='utf-8', newline='') as file:
         reader = csv.DictReader(file)
         expenses = []
 
