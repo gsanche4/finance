@@ -1,0 +1,7 @@
+__pycache__/
+.venv/
+.DS_Store
+*.egg-info/
+README.md
+data/*.csv
+!data/expenses.example.csv

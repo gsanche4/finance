@@ -1,40 +1,40 @@
-
-
 from InquirerPy import inquirer
-from budget_planner.ui.print_payment_schedule import print_payment_schedule
+from datetime import date
 from budget_planner.ui.view_expenses import view_expenses
+from budget_planner.storage.expense_csv import load_expenses
 
 
 class TerminalApp:
-    def __init__(self, data_path):
-        self.data_path = data_path
+    def __init__(self, csv_path):
+        self.csv_path = csv_path
         self.running = True
 
     def run(self):
-        while self.running:
-            self.main_menu()
+        try:
+            while self.running:
+                self.show_main_menu()
+        except KeyboardInterrupt:
+            print("\nGoodbye!")
 
-    def main_menu(self):
+    def show_main_menu(self):
+        menu_actions = {
+            "View Upcoming Expenses": self.show_upcoming_expenses,
+            "Exit": self.quit,
+        }
         choice = inquirer.select(
             message="What action would you like to perform?",
-            choices=[
-                "View Payment Schedule by Expense",
-                "View Expenses",
-                "Exit"
-            ],
+            choices=list(menu_actions),
         ).execute()
-
-        menu_actions = {
-            "View Payment Schedule by Expense": print_payment_schedule,
-            "View Expenses": self.show_expenses,
-            "Exit": self.exit_app
-        }
-
         menu_actions[choice]()
 
-    def show_expenses(self):
-        view_expenses(self.data_path)
+    def show_upcoming_expenses(self):
+        try:
+            expenses = load_expenses(self.csv_path)
+        except (OSError, ValueError) as error:
+            print(f"Could not load expenses: {error}")
+            return
+        view_expenses(expenses=expenses, today=date.today())
 
-    def exit_app(self):
+    def quit(self):
         print("Goodbye!")
         self.running = False

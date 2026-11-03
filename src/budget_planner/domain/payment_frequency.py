@@ -1,6 +1,5 @@
-
-
 from enum import Enum
+from dateutil.relativedelta import relativedelta
 
 
 class PaymentFrequency(Enum):
@@ -8,12 +7,15 @@ class PaymentFrequency(Enum):
     WEEKLY = "weekly"
     MONTHLY = "monthly"
     YEARLY = "yearly"
-    UNKNOWN = "unknown"
 
-    @classmethod
-    def from_str(cls, value: str) -> "PaymentFrequency":
-        try:
-            normalized_value = value.strip().lower()
-            return cls(normalized_value)
-        except (ValueError, AttributeError):
-            return cls.UNKNOWN
+    @property
+    def step(self) -> relativedelta:
+        return _STEPS[self]
+
+
+_STEPS = {
+    PaymentFrequency.DAILY: relativedelta(days=1),
+    PaymentFrequency.WEEKLY: relativedelta(weeks=1),
+    PaymentFrequency.MONTHLY: relativedelta(months=1),
+    PaymentFrequency.YEARLY: relativedelta(years=1),
+}

@@ -1,12 +1,9 @@
+from budget_planner.domain.next_occurrences import next_occurrences
+from budget_planner.domain.expense import Expense
+from budget_planner.ui.expense_table import expense_table
+from datetime import date
 
 
-from budget_planner.storage.load_expenses import load_expenses
-from budget_planner.ui.print_expenses import print_expenses
-
-
-FILEPATH = 'data/expenses.csv'
-
-
-def view_expenses():
-    expenses = load_expenses(FILEPATH)
-    print_expenses(expenses)
+def view_expenses(expenses: list[Expense], today: date) -> None:
+    expense_occurrences = next_occurrences(expenses=expenses, today=today)
+    print(expense_table(expense_occurrences))

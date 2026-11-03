@@ -1,0 +1,5 @@
+id,start_date,end_date,frequency,category,merchant,description,amount
+a0fe4ec3-b279-41f5-ae97-6de0e6b0c85d,2026-01-31,,monthly,subscription,Example Streaming,Bills on the 31st,9.99
+962f59ec-e237-4831-9bc6-709635948cbf,2026-03-01,2026-12-01,monthly,obligation,Example Lender,Ends after Dec 1,150.00
+ef2209e6-9ec9-413a-b208-26d5e8a87000,2026-01-05,,weekly,groceries,Example Market,,40.00
+00038a6e-6928-42c8-b98f-26965c3a7242,2025-06-15,,yearly,insurance,Example Insurer,Annual premium,600.00
