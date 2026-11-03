@@ -1,12 +1,11 @@
-
-
 from dataclasses import dataclass, field
-from uuid import uuid4
 from datetime import date
+from uuid import UUID, uuid4
+from budget_planner.domain.money import Money
 from budget_planner.domain.payment_frequency import PaymentFrequency
 
 
-@dataclass
+@dataclass(eq=False)
 class Expense:
     start_date: date
     end_date: date | None
@@ -14,18 +13,17 @@ class Expense:
     category: str
     merchant: str
     description: str | None
-    amount: str
-    id: str = field(default_factory=lambda: str(uuid4()))
+    amount: Money
+    id: UUID = field(default_factory=uuid4)
 
-    @classmethod
-    def from_dict(cls, row: dict):
-        return cls(
-            id=row["id"],
-            start_date=row["start_date"],
-            end_date=row["end_date"],
-            frequency=PaymentFrequency.from_str(row["frequency"]),
-            category=row["category"],
-            merchant=row["merchant"],
-            description=row["description"],
-            amount=float(row["amount"])
-        )
+    def __post_init__(self):
+        if self.end_date is not None and self.end_date < self.start_date:
+            raise ValueError("end_date cannot be before start_date")
+
+    def __eq__(self, other):
+        if not isinstance(other, Expense):
+            return NotImplemented
+        return self.id == other.id
+
+    def __hash__(self):
+        return hash(self.id)

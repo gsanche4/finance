@@ -1,5 +1,3 @@
-
-
 from InquirerPy import inquirer
 from datetime import date
 from budget_planner.ui.view_expenses import view_expenses
@@ -12,29 +10,31 @@ class TerminalApp:
         self.running = True
 
     def run(self):
-        while self.running:
-            self.main_menu()
+        try:
+            while self.running:
+                self.show_main_menu()
+        except KeyboardInterrupt:
+            print("\nGoodbye!")
 
-    def main_menu(self):
+    def show_main_menu(self):
+        menu_actions = {
+            "View Upcoming Expenses": self.show_upcoming_expenses,
+            "Exit": self.quit,
+        }
         choice = inquirer.select(
             message="What action would you like to perform?",
-            choices=[
-                "View Expenses",
-                "Exit"
-            ],
+            choices=list(menu_actions),
         ).execute()
-
-        menu_actions = {
-            "View Expenses": self.show_expenses,
-            "Exit": self.exit_app
-        }
-
         menu_actions[choice]()
 
-    def show_expenses(self):
-        expenses = load_expenses(self.csv_path)
-        view_expenses(expenses=expenses, day=date.today())
+    def show_upcoming_expenses(self):
+        try:
+            expenses = load_expenses(self.csv_path)
+        except (OSError, ValueError) as error:
+            print(f"Could not load expenses: {error}")
+            return
+        view_expenses(expenses=expenses, today=date.today())
 
-    def exit_app(self):
+    def quit(self):
         print("Goodbye!")
         self.running = False

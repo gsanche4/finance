@@ -1,5 +1,3 @@
-
-
 from dataclasses import dataclass
 
 from budget_planner.domain.expense import Expense

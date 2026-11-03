@@ -1,26 +1,48 @@
-
-
 from budget_planner.domain.expense_occurrence import ExpenseOccurrence
+from budget_planner.domain.money import Money
+
+MERCHANT_WIDTH = 20
+CATEGORY_WIDTH = 15
+AMOUNT_WIDTH = 12
+DATE_WIDTH = 12
+TABLE_WIDTH = MERCHANT_WIDTH + CATEGORY_WIDTH + AMOUNT_WIDTH + DATE_WIDTH + 3
 
 
-def expense_table(expense_occurrences: list[ExpenseOccurrence]) -> None:
+def _fit(text: str, width: int) -> str:
+    if len(text) <= width:
+        return text
+    return text[: width - 1] + "…"
+
+
+def _dollars(amount: Money) -> str:
+    return f"${amount:,.2f}"
+
+
+def expense_table(expense_occurrences: list[ExpenseOccurrence]) -> str:
     if not expense_occurrences:
-        print("No expenses found.")
-        return
+        return "No expenses found."
 
-    print(f"{'Merchant':<20} {'Category':<15} {'Amount':>12} {'Due Date':>12}")
-    print("-" * 62)
+    lines = [
+        f"{'Merchant':<{MERCHANT_WIDTH}} {'Category':<{CATEGORY_WIDTH}} "
+        f"{'Amount':>{AMOUNT_WIDTH}} {'Due Date':>{DATE_WIDTH}}",
+        "-" * TABLE_WIDTH,
+    ]
 
-    total_expense_amount = 0
     for occurrence in expense_occurrences:
         expense = occurrence.expense
-        total_expense_amount += expense.amount
-        print(
-            f"{expense.merchant:<20} "
-            f"{expense.category:<15} "
-            f"${expense.amount:>9,.2f} "
-            f"{occurrence.due_date.strftime('%m/%d/%y'):>12}"
+        due_date = occurrence.due_date.strftime("%m/%d/%y")
+        lines.append(
+            f"{_fit(expense.merchant, MERCHANT_WIDTH):<{MERCHANT_WIDTH}} "
+            f"{_fit(expense.category, CATEGORY_WIDTH):<{CATEGORY_WIDTH}} "
+            f"{_dollars(expense.amount):>{AMOUNT_WIDTH}} "
+            f"{due_date:>{DATE_WIDTH}}"
         )
 
-    print("-" * 62)
-    print(f"{'Total':<35} ${total_expense_amount:>11,.2f}")
+    total_amount = sum(
+        (occurrence.expense.amount for occurrence in expense_occurrences), Money.zero()
+    )
+    label_width = MERCHANT_WIDTH + 1 + CATEGORY_WIDTH
+    lines.append("-" * TABLE_WIDTH)
+    lines.append(f"{'Total':<{label_width}} {_dollars(total_amount):>{AMOUNT_WIDTH}}")
+
+    return "\n".join(lines)

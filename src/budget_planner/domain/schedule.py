@@ -1,65 +1,53 @@
-
-
 from budget_planner.domain.expense import Expense
-from budget_planner.domain.payment_frequency import PaymentFrequency
 from budget_planner.domain.expense_occurrence import ExpenseOccurrence
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
 
 def first_occurrence_on_or_after(
-        expense: Expense,
-        day: date
+    expense: Expense, day: date
 ) -> ExpenseOccurrence | None:
-    if not day:
-        day = expense.start_date
+    """First occurrence on or after `day`, or None if the expense has ended.
 
-    if expense.end_date and expense.start_date > expense.end_date:
+    Every date is computed from start_date (start + n * step), never from
+    the previous date.
+    """
+    step = expense.frequency.step
+    due_date = expense.start_date
+    occurrence_number = 0
+
+    while due_date < day:
+        occurrence_number += 1
+        due_date = expense.start_date + step * occurrence_number
+
+    if expense.end_date and due_date > expense.end_date:
         return None
 
-    current_due_date = expense.start_date
-
-    if expense.frequency == PaymentFrequency.MONTHLY:
-        months_elapsed = 1
-        while current_due_date < day:
-            current_due_date = (
-                expense.start_date + relativedelta(months=months_elapsed)
-            )
-            months_elapsed += 1
-
-    if expense.end_date and current_due_date > expense.end_date:
-        return None
-
-    return ExpenseOccurrence(expense=expense, due_date=current_due_date)
+    return ExpenseOccurrence(expense=expense, due_date=due_date)
 
 
 def occurrences_between(
-    expense: Expense,
-    start: date,
-    end: date
+    expense: Expense, first_day: date, last_day: date
 ) -> list[ExpenseOccurrence]:
-    if end < expense.start_date:
+    """All occurrences from `first_day` to `last_day`, both inclusive."""
+    if last_day < expense.start_date:
         return []
-    if expense.end_date and start > expense.end_date:
+    if expense.end_date and first_day > expense.end_date:
         return []
 
-    payments = []
+    occurrences = []
 
-    search_start = max(expense.start_date, start)
-    current_payment = first_occurrence_on_or_after(
-        expense=expense,
-        day=search_start
-    )
+    search_start = max(expense.start_date, first_day)
+    occurrence = first_occurrence_on_or_after(expense=expense, day=search_start)
 
-    while current_payment and current_payment.due_date <= end:
-        if expense.end_date and current_payment.due_date > expense.end_date:
+    while occurrence and occurrence.due_date <= last_day:
+        if expense.end_date and occurrence.due_date > expense.end_date:
             break
 
-        payments.append(current_payment)
+        occurrences.append(occurrence)
 
-        current_payment = first_occurrence_on_or_after(
-            expense=expense,
-            day=(current_payment.due_date + relativedelta(days=1))
+        occurrence = first_occurrence_on_or_after(
+            expense=expense, day=(occurrence.due_date + relativedelta(days=1))
         )
 
-    return payments
+    return occurrences
