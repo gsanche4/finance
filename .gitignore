@@ -5,3 +5,4 @@ __pycache__/
 README.md
 data/*.csv
 !data/expenses.example.csv
+CLAUDE.md
